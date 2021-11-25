@@ -122,7 +122,8 @@ defmodule OpenApiSpex.Plug.CastTest do
           "name" => "asdf",
           "email" => "foo@bar.com",
           "password" => "0123456789",
-          "updated_at" => "2017-09-12T14:44:55Z"
+          "updated_at" => "2017-09-12T14:44:55Z",
+          "slug" => "d7ac1cca-1c3a-4e27-a574-f8b6bee7e248"
         }
       }
 
@@ -138,7 +139,8 @@ defmodule OpenApiSpex.Plug.CastTest do
                  name: "asdf",
                  email: "foo@bar.com",
                  password: "0123456789",
-                 updated_at: ~N[2017-09-12T14:44:55Z] |> DateTime.from_naive!("Etc/UTC")
+                 updated_at: ~N[2017-09-12T14:44:55Z] |> DateTime.from_naive!("Etc/UTC"),
+                 slug: "d7ac1cca-1c3a-4e27-a574-f8b6bee7e248"
                }
              }
 
@@ -148,7 +150,8 @@ defmodule OpenApiSpex.Plug.CastTest do
                  "id" => 1234,
                  "inserted_at" => nil,
                  "name" => "asdf",
-                 "updated_at" => "2017-09-12T14:44:55Z"
+                 "updated_at" => "2017-09-12T14:44:55Z",
+                 "slug" => "d7ac1cca-1c3a-4e27-a574-f8b6bee7e248"
                }
              }
     end

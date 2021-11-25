@@ -179,6 +179,13 @@ defmodule OpenApiSpexTest.Schemas do
     })
   end
 
+  defmodule Slug do
+    OpenApiSpex.schema(%{
+      type: :string,
+      example: "82d5cefb-45d8-4e68-8d99-21f9f7c9d374"
+    })
+  end
+
   defmodule User do
     OpenApiSpex.schema(%{
       title: "User",
@@ -194,7 +201,8 @@ defmodule OpenApiSpexTest.Schemas do
           description: "Creation timestamp",
           format: :"date-time"
         },
-        updated_at: %Schema{type: :string, description: "Update timestamp", format: :"date-time"}
+        updated_at: %Schema{type: :string, description: "Update timestamp", format: :"date-time"},
+        slug: Slug
       },
       required: [:name, :email, :password],
       additionalProperties: false,
@@ -204,7 +212,8 @@ defmodule OpenApiSpexTest.Schemas do
         "email" => "joe@gmail.com",
         "password" => "12345678",
         "inserted_at" => "2017-09-12T12:34:55Z",
-        "updated_at" => "2017-09-13T10:11:12Z"
+        "updated_at" => "2017-09-13T10:11:12Z",
+        "slug" => {:example, Slug}
       }
     })
   end

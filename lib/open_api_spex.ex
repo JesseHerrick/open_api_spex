@@ -241,6 +241,15 @@ defmodule OpenApiSpex do
     compiler warnings.
   """
   defmacro schema(body, opts \\ []) do
+    runtime? = Application.get_env(:open_api_spex, :runtime, true)
+
+    body =
+      if runtime? and Macro.quoted_literal?(body) do
+        Macro.prewalk(body, &expand_alias(&1, __CALLER__))
+      else
+        body
+      end
+
     quote do
       @compile {:report_warnings, false}
       @behaviour OpenApiSpex.Schema
@@ -263,6 +272,13 @@ defmodule OpenApiSpex do
       end
     end
   end
+
+  # thank you: https://github.com/phoenixframework/phoenix/blob/3a9ae5c6bfed972547c66f11788080ee46fd9c5b/lib/phoenix/router.ex
+  defp expand_alias({:__aliases__, _, _} = alias, env) do
+    Macro.expand(alias, env)
+  end
+
+  defp expand_alias(other, _env), do: other
 
   @doc """
   Build a Schema struct from the given keyword list.
@@ -295,6 +311,18 @@ defmodule OpenApiSpex do
       end)
       |> update_in([:title], fn title ->
         title || title_from_module(module)
+      end)
+      |> update_in([:example], fn
+        example_map when is_map(example_map) ->
+          Enum.reduce(example_map, example_map, fn
+            {key, {:example, module}}, acc ->
+              value = Schema.example(apply(module, :schema, []))
+              Map.put(acc, key, value)
+            {_key, _value}, acc ->
+              acc
+          end)
+        example ->
+          example
       end)
 
     schema = struct(OpenApiSpex.Schema, attrs)
